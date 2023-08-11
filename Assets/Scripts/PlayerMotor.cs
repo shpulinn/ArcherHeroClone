@@ -23,6 +23,7 @@ public class PlayerMotor : MonoBehaviour
     private int animDeadBool;
 
     private BaseState _state;
+    private EnemiesManager _enemiesManager;
     private const string ENEMY_TAG = "Enemy";
 
     #region Properties
@@ -45,6 +46,8 @@ public class PlayerMotor : MonoBehaviour
 
         _state = GetComponent<IdleState>();
         _state.Construct();
+
+        _enemiesManager = FindObjectOfType<EnemiesManager>();
 
         AssignAnimationID();
     }
@@ -81,6 +84,15 @@ public class PlayerMotor : MonoBehaviour
                     _isRunning = false;
                 }
             }
+        }
+
+        if (_enemiesManager.IsAnyEnemyAlive() && _isRunning == false)
+        {
+            _isFighting = true;
+        }
+        else
+        {
+            _isFighting = false;
         }
     }
 
@@ -155,11 +167,6 @@ public class PlayerMotor : MonoBehaviour
         _state.Destruct();
         _state = state;
         _state.Construct();
-    }
-
-    public void StartFight()
-    {
-        _isFighting = true;
     }
     
     private void OnCollisionEnter(Collision collision)
