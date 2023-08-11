@@ -38,8 +38,12 @@ public class FightingState : BaseState
     private Transform _nearestEnemy;
     private static readonly int Firing = Animator.StringToHash("Firing");
 
+    private EnemiesManager _enemiesManager;
+
     private void Start()
     {
+        _enemiesManager = FindObjectOfType<EnemiesManager>();
+        
         _idleState = GetComponent<IdleState>();
         _runningState = GetComponent<RunningState>();
         _deathState = GetComponent<DeathState>();
@@ -56,6 +60,14 @@ public class FightingState : BaseState
             lineRenderer.enabled = true;
             CreatePoints();
         }
+        
+        //EnemyHealth.OnAnyEnemyDieEvent += OnAnyEnemyDieEvent;
+    }
+
+    private void OnAnyEnemyDieEvent(object sender, EventArgs e)
+    {
+        //_enemiesManager.RefreshEnemiesList();
+        //colliders = _enemiesManager.GetEnemiesColliders();
     }
 
     // method for drawing player shooting radius via line renderer
@@ -81,14 +93,16 @@ public class FightingState : BaseState
     public override void Construct()
     {
         stateName = "Fighting";
+        
+        colliders = _enemiesManager.GetEnemiesColliders();
     }
 
     public override void Transition()
     {
         // CREATE TRANSITION TO IDLE !!!
 
-        colliders = Physics.OverlapSphere(transform.position, visionRadius, enemyLayerMask);
-        
+        //colliders = Physics.OverlapSphere(transform.position, visionRadius, enemyLayerMask);
+        colliders = _enemiesManager.GetEnemiesColliders();
         foreach (var col in colliders)
         {
             Transform nearestEnemy = GetClosestEnemy(colliders);
@@ -103,7 +117,7 @@ public class FightingState : BaseState
 
             transform.LookAt(nearestEnemy);
 
-            if (!_isReloading)
+            if (!_isReloading && nearestEnemy != null)
             {
                 Shoot(nearestEnemy.GetComponent<EnemyHealth>());
             }
@@ -136,8 +150,8 @@ public class FightingState : BaseState
         }
         playerMotor.StopMoving();
         _animator.SetBool("Firing", true);
-        enemyHealth.TakeDamage(damage);
-        Vector3 aimDirection = (enemyHealth.transform.position - projectileSpawnPos.position).normalized;
+        //enemyHealth.TakeDamage(damage);
+        Vector3 aimDirection = (enemyHealth.transform.position - projectileSpawnPos.position).normalized + new Vector3(0, .1f,0);
         Instantiate(projectilePrefab.gameObject, projectileSpawnPos.position,
             Quaternion.LookRotation(aimDirection, Vector3.up));
         StartCoroutine(ReloadCoroutine());
@@ -155,6 +169,10 @@ public class FightingState : BaseState
         List<Transform> enemiesTransform = new List<Transform>();
         for (int i = 0; i < enemies.Length; i++)
         {
+            if (enemies[i] == null)
+            {
+                continue;
+            }
             enemiesTransform.Add(enemies[i].transform);
         }
         Transform bestTarget = null;
