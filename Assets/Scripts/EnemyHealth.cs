@@ -1,10 +1,15 @@
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
+    public static EventHandler<EnemyHealth> OnAnyEnemyDieEvent;
+    
     [SerializeField] private float maxHealthPoints = 10.0f;
     [SerializeField] private ParticleSystem bloodParticles;
     [SerializeField] private float timeToDestroyAfterDeath = 2.0f;
+    [SerializeField] private Image healthImageBar;
 
     private float _currentHP;
     private Animator _animator;
@@ -24,8 +29,8 @@ public class EnemyHealth : MonoBehaviour
 
     private void AssignAnimationsID()
     {
-        takeDamageAnimationTriggerID = Animator.StringToHash("TakeDamage");
-        isDeadAnimationID = Animator.StringToHash("IsDead");
+        takeDamageAnimationTriggerID = Animator.StringToHash("Hit");
+        //isDeadAnimationID = Animator.StringToHash("IsDead");
     }
 
     public void TakeDamage(float damage)
@@ -36,9 +41,11 @@ public class EnemyHealth : MonoBehaviour
         }
         _animator.SetTrigger(takeDamageAnimationTriggerID);
         _currentHP -= damage;
+        healthImageBar.fillAmount = _currentHP / maxHealthPoints;
         if (_currentHP <= 0)
         {
             Die();
+            OnAnyEnemyDieEvent?.Invoke(this, this);
         }
     }
 
