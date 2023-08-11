@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,6 +33,10 @@ public class Projectile : MonoBehaviour
         // } else {
         //     Instantiate(particlesDefault, transform.position, Quaternion.identity);
         // }
+        if (other.TryGetComponent(out EnemyHealth enemyHealth))
+        {
+            enemyHealth.TakeDamage(bulletDamage);
+        }
         Destroy(gameObject);
     }
 }
