@@ -14,22 +14,14 @@ public class FightingState : BaseState
 
     [Header("Gun settings")]
     [SerializeField] private float damage = 4.0f;
-    [SerializeField] private float energyCost = 0.2f;
     [SerializeField] private float reloadingTime = 1.0f;
     [SerializeField] private Transform projectileSpawnPos;
     [SerializeField] private Projectile projectilePrefab;
     [Space]
-    [SerializeField] private float visionRadius = 5.0f;
-    [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private ParticleSystem fireParticles;
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField] private LayerMask defaultLayerMask;
     [SerializeField] private Animator _animator;
-
-    [Header("Draw shoot radius via line renderer")] [SerializeField]
-    private bool showShootingRadius;
-
-    [SerializeField] private List<EnemyHealth> enemyHealths = new List<EnemyHealth>();
 
     public Collider[] colliders;
 
@@ -51,15 +43,6 @@ public class FightingState : BaseState
         _motionAnimationID = Animator.StringToHash("Motion");
         
         _inputManager = InputManager.Instance;
-
-        lineRenderer.positionCount = 51;
-        lineRenderer.useWorldSpace = false;
-        lineRenderer.enabled = false;
-        if (showShootingRadius)
-        {
-            lineRenderer.enabled = true;
-            CreatePoints();
-        }
         
         //EnemyHealth.OnAnyEnemyDieEvent += OnAnyEnemyDieEvent;
     }
@@ -68,26 +51,6 @@ public class FightingState : BaseState
     {
         //_enemiesManager.RefreshEnemiesList();
         //colliders = _enemiesManager.GetEnemiesColliders();
-    }
-
-    // method for drawing player shooting radius via line renderer
-    private void CreatePoints()
-    {
-        float x;
-        float y;
-        float z;
-
-        float angle = 20f;
-
-        for (int i = 0; i < (51); i++)
-        {
-            x = Mathf.Sin (Mathf.Deg2Rad * angle) * visionRadius;
-            y = Mathf.Cos (Mathf.Deg2Rad * angle) * visionRadius;
-
-            lineRenderer.SetPosition (i,new Vector3(x,y,0) );
-
-            angle += (360f / 51);
-        }
     }
     
     public override void Construct()
@@ -106,14 +69,13 @@ public class FightingState : BaseState
         foreach (var col in colliders)
         {
             Transform nearestEnemy = GetClosestEnemy(colliders);
-            // Ray ray = new Ray(transform.position, nearestEnemy.transform.position);
-            // RaycastHit hit;
-            // if (Physics.Raycast(ray, out hit, Mathf.Infinity, enemyLayerMask))
-            // {
-            //     // there is obstacle between player and enemy, skip that 
-            //     Debug.Log(hit.collider.name);
-            //     continue;
-            // }
+            
+            // if there no enemies on this level/stage/sector
+            if (Vector3.Distance(transform.position, nearestEnemy.position) > 30f)
+            {
+                playerMotor.ChangeState(_idleState);
+                return;
+            }
 
             transform.LookAt(nearestEnemy);
 
@@ -150,7 +112,6 @@ public class FightingState : BaseState
         }
         playerMotor.StopMoving();
         _animator.SetBool("Firing", true);
-        //enemyHealth.TakeDamage(damage);
         Vector3 aimDirection = (enemyHealth.transform.position - projectileSpawnPos.position).normalized + new Vector3(0, .1f,0);
         Instantiate(projectilePrefab.gameObject, projectileSpawnPos.position,
             Quaternion.LookRotation(aimDirection, Vector3.up));
