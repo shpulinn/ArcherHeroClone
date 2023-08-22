@@ -11,7 +11,9 @@ public class EnemiesManager : MonoBehaviour
     private List<Collider> enemiesAlive = new List<Collider>();
     void Start()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 30f, enemiesLayerMask);
+        //Collider[] colliders = Physics.OverlapSphere(transform.position, 30f, enemiesLayerMask);
+        List<Collider> colliders = Physics.OverlapBox(transform.position, transform.localScale / 2, Quaternion.identity,
+            enemiesLayerMask).ToList();
         enemiesAlive = colliders.ToList();
         
         EnemyHealth.OnAnyEnemyDieEvent += OnAnyEnemyDieEvent;
@@ -26,7 +28,9 @@ public class EnemiesManager : MonoBehaviour
     public void RefreshEnemiesList()
     {
         //Collider[] colliders = Physics.OverlapSphere(transform.position, 30f, enemiesLayerMask);
-        List<Collider> colliders = Physics.OverlapSphere(transform.position, 30f, enemiesLayerMask).ToList();
+        //List<Collider> colliders = Physics.OverlapSphere(transform.position, 30f, enemiesLayerMask).ToList();
+        List<Collider> colliders = Physics.OverlapBox(transform.position, transform.localScale / 2, Quaternion.identity,
+            enemiesLayerMask).ToList();
         // for (int i = 0; i < colliders.Count; i++)
         // {
         //     if (colliders[i] == null)
@@ -54,6 +58,7 @@ public class EnemiesManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, 30f);
+        //Gizmos.DrawWireSphere(transform.position, 30f);
+        Gizmos.DrawWireCube(transform.position, transform.localScale);
     }
 }
