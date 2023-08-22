@@ -414,6 +414,9 @@ MonoBehaviour:
   bloodParticles: {fileID: 0}
   timeToDestroyAfterDeath: 2
   healthImageBar: {fileID: 9159961498437283656}
+  moneyPrefab: {fileID: 2798328933605456998, guid: cc32e8bb599b6a74a9cc87febf430b91,
+    type: 3}
+  moneyRange: 4
 --- !u!1 &7933327259733397132
 GameObject:
   m_ObjectHideFlags: 0
