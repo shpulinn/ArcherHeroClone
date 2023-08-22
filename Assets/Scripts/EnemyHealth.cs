@@ -1,6 +1,8 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -10,6 +12,10 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private ParticleSystem bloodParticles;
     [SerializeField] private float timeToDestroyAfterDeath = 2.0f;
     [SerializeField] private Image healthImageBar;
+    [Space]
+    [SerializeField] private GameObject moneyPrefab;
+
+    private int moneyRange;
 
     private float _currentHP;
     private Animator _animator;
@@ -23,6 +29,8 @@ public class EnemyHealth : MonoBehaviour
         _currentHP = maxHealthPoints;
         _animator = GetComponent<Animator>();
         //_enemyMovement = GetComponent<EnemyMovement>();
+
+        moneyRange = Random.Range(1, 11);
 
         AssignAnimationsID();
     }
@@ -58,7 +66,17 @@ public class EnemyHealth : MonoBehaviour
         // Destroying this component and EnemyMovement component for "disabling" enemy, 
         // but leave on scene for "timeToDestroyAfterDeath" seconds after death and then disappear
         // Destroy(this);
+        for (int i = 0; i < moneyRange; i++)
+        {
+            Instantiate(moneyPrefab, GetRandomPositionNear(), quaternion.identity);
+        }
         Destroy(gameObject);
         //Destroy(_enemyMovement);
+    }
+
+    private Vector3 GetRandomPositionNear()
+    {
+        return new Vector3(transform.position.x + Random.Range(-2, 2), transform.position.y,
+            transform.position.z + Random.Range(-2, 2));
     }
 }
