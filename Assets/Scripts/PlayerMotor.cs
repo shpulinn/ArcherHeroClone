@@ -35,7 +35,12 @@ public class PlayerMotor : MonoBehaviour
         get { return _isFighting;}
         set { _isFighting = value; }
     }
-    public bool IsDead => _isDead;
+
+    public bool IsDead
+    {
+        get { return _isDead; }
+        set { _isDead = value; }
+    }
 
     #endregion
 
