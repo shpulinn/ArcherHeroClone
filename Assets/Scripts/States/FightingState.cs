@@ -12,12 +12,14 @@ public class FightingState : BaseState
     private InputManager _inputManager;
     private int _motionAnimationID;
 
-    [Header("Gun settings")]
+    [Header("Gun settings")] 
+    [SerializeField] private PlayerStatsSO PlayerStatsSO;
     [SerializeField] private float damage = 4.0f;
     [SerializeField] private float reloadingTime = 1.0f;
     [SerializeField] private Transform projectileSpawnPos;
     [SerializeField] private Projectile projectilePrefab;
-    [Space]
+    [Space] [SerializeField] private AudioClip firingSound;
+    [SerializeField] private float fireSoundVolume = .3f;
     [SerializeField] private ParticleSystem fireParticles;
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField] private LayerMask defaultLayerMask;
@@ -43,7 +45,9 @@ public class FightingState : BaseState
         _motionAnimationID = Animator.StringToHash("Motion");
         
         _inputManager = InputManager.Instance;
-        
+
+        projectilePrefab.SetDamage(PlayerStatsSO.damage);
+
         //EnemyHealth.OnAnyEnemyDieEvent += OnAnyEnemyDieEvent;
     }
 
@@ -115,6 +119,10 @@ public class FightingState : BaseState
         Vector3 aimDirection = (enemyHealth.transform.position - projectileSpawnPos.position).normalized + new Vector3(0, .1f,0);
         Instantiate(projectilePrefab.gameObject, projectileSpawnPos.position,
             Quaternion.LookRotation(aimDirection, Vector3.up));
+        if (firingSound != null)
+        {
+            AudioSource.PlayClipAtPoint(firingSound, transform.position, fireSoundVolume);
+        }
         StartCoroutine(ReloadCoroutine());
     }
 
