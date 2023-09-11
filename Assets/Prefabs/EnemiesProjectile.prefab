@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8849933192674416099}
-  - component: {fileID: 4971395788697715575}
   - component: {fileID: 7000047998425289385}
   - component: {fileID: 6702798191163551490}
-  m_Layer: 7
-  m_Name: MagicProjectile
+  - component: {fileID: 3062664819388090288}
+  m_Layer: 8
+  m_Name: EnemiesProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,24 +36,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4971395788697715575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4259071534674452083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36dff4b4ff4e666439317f7f7e23461a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletSpeed: 8
-  bulletDamage: 4
-  particlesEnemy: {fileID: 0}
-  particlesDefault: {fileID: 4391565105945276152, guid: 1644b953e705474439e0b2aafefd3571,
-    type: 3}
-  hitSound: {fileID: 8300000, guid: ce066d64a7dc4bb469eb2c099c3f0c87, type: 3}
 --- !u!54 &7000047998425289385
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -102,6 +84,24 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.12
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3062664819388090288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4259071534674452083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce0c782ff5fc3c40ba43364129ff7fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletSpeed: 10
+  bulletDamage: 3
+  particlesEnemy: {fileID: 0}
+  particlesDefault: {fileID: 0}
+  hitSound: {fileID: 0}
+  hitSoundVolume: 0.3
 --- !u!1 &7445999714950140362
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 3681350486981318263}
   - component: {fileID: 3255843232419929413}
   - component: {fileID: 4720842572063106230}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 3405586471880223196}
   - component: {fileID: 2547660911119755984}
   - component: {fileID: 581784751133485041}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -281,7 +281,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7c1955d011febb44a92e998452921b3a, type: 2}
+  - {fileID: 2100000, guid: 948b24fb23ccdb74aafa2b7c50c70aee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
