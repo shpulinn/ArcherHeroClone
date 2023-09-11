@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class EnemiesManager : MonoBehaviour
 {
+    public EventHandler OnAllEnemiesDead;
+    
     [SerializeField] private LayerMask enemiesLayerMask;
 
     private List<Collider> enemiesAlive = new List<Collider>();
@@ -23,6 +25,10 @@ public class EnemiesManager : MonoBehaviour
     {
         enemiesAlive.Remove(eh.GetComponent<Collider>());
         //RefreshEnemiesList();
+        if (enemiesAlive.Count == 0)
+        {
+            OnAllEnemiesDead?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public void RefreshEnemiesList()

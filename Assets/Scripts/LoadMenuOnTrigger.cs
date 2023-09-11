@@ -7,6 +7,7 @@ public class LoadMenuOnTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Loader.Load(Loader.Scenes.MainMenu);
+            PlayerPrefs.SetInt("TUTORIAL_COMPLETE", 1);
         }
     }
 }

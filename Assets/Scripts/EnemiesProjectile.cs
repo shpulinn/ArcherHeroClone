@@ -1,8 +1,8 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class EnemiesProjectile : MonoBehaviour
 {
     [SerializeField] private float bulletSpeed = 30f;
     [SerializeField] private float bulletDamage = 20f;
@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
     public void SetDamage(int damage)
     {
         bulletDamage = damage;
-    } 
+    }
 
     private void Awake ()
     {
@@ -35,14 +35,14 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter (Collider other)
     {
-        if (other.CompareTag("Enemy") && particlesEnemy != null) {
+        if (other.CompareTag("Player") && particlesEnemy != null) {
             Instantiate(particlesEnemy, transform.position, Quaternion.identity);
         } else if (other.CompareTag("Untagged") && particlesDefault != null) {
             Instantiate(particlesDefault, transform.position, Quaternion.identity);
         }
-        if (other.TryGetComponent(out EnemyHealth enemyHealth))
+        if (other.TryGetComponent(out PlayerHealth playerHealth))
         {
-            enemyHealth.TakeDamage(bulletDamage);
+            playerHealth.TakeDamage(bulletDamage);
         }
 
         if (hitSound != null)

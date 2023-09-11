@@ -1,9 +1,16 @@
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public EventHandler OnPlayerDead;
+
+    [DllImport("__Internal")]
+    private static extern void ShowAdv();
+    
+    [SerializeField] private PlayerStatsSO playerStatsSO;
     [SerializeField] private float maxHealthPoints = 10.0f;
     [SerializeField] private ParticleSystem bloodParticles;
     //[SerializeField] private float timeToDestroyAfterDeath = 2.0f;
@@ -22,7 +29,8 @@ public class PlayerHealth : MonoBehaviour
     {
         _playerMotor = GetComponent<PlayerMotor>();
         _animator = GetComponentInChildren<Animator>();
-        
+
+        maxHealthPoints = playerStatsSO.health;
         _currentHP = maxHealthPoints;
         healthImageBar.fillAmount = _currentHP;
         AssignAnimationsID();
@@ -64,14 +72,16 @@ public class PlayerHealth : MonoBehaviour
     {
         _playerMotor.IsDead = true;
         _animator.SetBool(isDeadAnimationID, true);
+        OnPlayerDead?.Invoke(this, EventArgs.Empty);
+        ShowAdv();
         //Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            TakeDamage(2);
-        }
-    }
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Enemy"))
+    //     {
+    //         TakeDamage(2);
+    //     }
+    // }
 }

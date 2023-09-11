@@ -14,6 +14,8 @@ public class MoneyManager : MonoBehaviour
     void Start()
     {
         Instance = this;
+
+        _currentMoney = PlayerPrefs.GetInt("MONEY", 0);
         
         UpdateUI();
     }
@@ -21,6 +23,7 @@ public class MoneyManager : MonoBehaviour
     public void AddMoney(int amount)
     {
         _currentMoney += amount;
+        PlayerPrefs.SetInt("MONEY", _currentMoney);
         UpdateUI();
     }
 
@@ -32,6 +35,7 @@ public class MoneyManager : MonoBehaviour
         }
 
         _currentMoney -= amount;
+        PlayerPrefs.SetInt("MONEY", _currentMoney);
         UpdateUI();
         return true;
     }

@@ -47,7 +47,11 @@ public class EnemyHealth : MonoBehaviour
         {
             bloodParticles.Play();
         }
-        _animator.SetTrigger(takeDamageAnimationTriggerID);
+
+        if (_animator != null)
+        {
+            _animator.SetTrigger(takeDamageAnimationTriggerID);
+        }
         _currentHP -= damage;
         healthImageBar.fillAmount = _currentHP / maxHealthPoints;
         if (_currentHP <= 0)
@@ -76,7 +80,7 @@ public class EnemyHealth : MonoBehaviour
 
     private Vector3 GetRandomPositionNear()
     {
-        return new Vector3(transform.position.x + Random.Range(-2, 2), transform.position.y,
-            transform.position.z + Random.Range(-2, 2));
+        return new Vector3(transform.position.x + Random.Range(-1f, 1f), transform.position.y,
+            transform.position.z + Random.Range(-1f, 1f));
     }
 }
